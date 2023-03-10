@@ -116,7 +116,7 @@ class GroupScreen extends StatelessWidget {
                             backgroundColor: Colors.green,
                           ),
                           onPressed: () {
-                            if(AppCubit.get(context).joinedUsers?.length != 3){
+                            if(AppCubit.get(context).joinedUsers?.length == 3){
                               showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
