@@ -132,6 +132,8 @@ class GroupScreen extends StatelessWidget {
                                   ),
                                 ),
                               );
+                            } else if (AppCubit.get(context).joinedUsers?.length == 4){
+                                AppCubit.get(context).joinedUsers?.length--;
                             } else {
                               navigateAndFinish(context, JoinedScreen());
                               AppCubit.get(context).joinGroup(
