@@ -9,6 +9,7 @@ class SignUpForm extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -17,6 +18,23 @@ class SignUpForm extends StatelessWidget {
     return Form(
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: defaultPadding,),
+            child: TextFormField(
+              controller: nameController,
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              cursorColor: kPrimaryColor,
+              onSaved: (email) {},
+              decoration: InputDecoration(
+                hintText: "Your name",
+                prefixIcon: Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Icon(Icons.person),
+                ),
+              ),
+            ),
+          ),
           TextFormField(
             controller: emailController,
             keyboardType: TextInputType.emailAddress,
@@ -27,7 +45,7 @@ class SignUpForm extends StatelessWidget {
               hintText: "Your email",
               prefixIcon: Padding(
                 padding: const EdgeInsets.all(defaultPadding),
-                child: Icon(Icons.person),
+                child: Icon(Icons.email),
               ),
             ),
           ),
@@ -51,6 +69,7 @@ class SignUpForm extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               AppCubit.get(context).signUpUsingFirebase(
+                nameController.text,
                 emailController.text,
                 passwordController.text,
                 context,

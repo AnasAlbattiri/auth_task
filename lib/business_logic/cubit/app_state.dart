@@ -25,3 +25,24 @@ class SignupErrorState extends AppState
 
   SignupErrorState(this.error);
 }
+
+// join group
+class JoinGroupSuccessState extends AppState {}
+
+class JoinGroupErrorState extends AppState
+{
+  final String error;
+
+  JoinGroupErrorState(this.error);
+}
+
+// get joined users
+
+class GetJoinedUsersSuccessState extends AppState {}
+
+class GetJoinedUsersErrorState extends AppState
+{
+  final String error;
+
+  GetJoinedUsersErrorState(this.error);
+}

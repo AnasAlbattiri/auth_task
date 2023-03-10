@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:three_stars_task/view/screens/joined_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:three_stars_task/utils/constants.dart';
+import 'package:three_stars_task/view/widgets/background.dart';
+import 'package:three_stars_task/view/widgets/has_joined.dart';
 import '../../business_logic/cubit/app_cubit.dart';
-import '../../data/model/joined.dart';
 import '../../data/model/user.dart';
-import '../../utils/constants.dart';
 
-class GroupScreen extends StatelessWidget {
-  GroupScreen({Key? key}) : super(key: key);
+class JoinedScreen extends StatelessWidget {
+  JoinedScreen({Key? key}) : super(key: key);
 
-  Joined? groupModel;
   User? userModel;
-
-  TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +17,16 @@ class GroupScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
-          'Group',
+          'Joined',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
         centerTitle: true,
         backgroundColor: kPrimaryColor,
-      ),
-      body: Column(
-        children: [
-          InkWell(
-            onTap: () {
+        actions: [
+          IconButton(
+            onPressed: () {
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
@@ -40,18 +36,13 @@ class GroupScreen extends StatelessWidget {
                       children: [
                         TextButton(
                           style: TextButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: Colors.black,
                           ),
                           onPressed: () {
-                            navigateAndFinish(context, JoinedScreen());
-                            AppCubit.get(context).joinGroup(
-                              name: auth.currentUser?.displayName,
-                              uId: auth.currentUser?.uid,
-                            );
-                            AppCubit.get(context).getJoinedUsers();
+                            AppCubit.get(context).signOut(context);
                           },
                           child: Text(
-                            'Join',
+                            'Yes',
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -78,40 +69,54 @@ class GroupScreen extends StatelessWidget {
                     ),
                   ],
                   title: Center(
-                      child: Text(
-                    'Group of 3 users',
+                    child: Text(
+                      'Logout From App',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.only(
+                    top: 6,
+                  ),
+                  content: Text(
+                    '   Are you sure you need to logout?',
                     style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
+                      fontSize: 15,
+                      color: kPrimaryColor,
                       fontWeight: FontWeight.bold,
                     ),
-                  )),
+                  ),
                 ),
               );
             },
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                    backgroundColor: kPrimaryColor,
-                    backgroundImage: NetworkImage(
-                        'https://th.bing.com/th/id/OIP.Ro6ih6nc8V5gAw4bEtOO_AAAAA?pid=ImgDet&rs=1'),
-                    radius: 46,
-                  ),
-                ),
-                Text(
-                  'Group of 3 users',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ],
+            icon: Icon(
+              Icons.logout,
             ),
           ),
         ],
       ),
+      body: BlocConsumer<AppCubit, AppState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is JoinGroupSuccessState) {
+            return ListView.separated(
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: hasJoined(AppCubit.get(context).joinedUsers![index]),
+              ),
+              separatorBuilder: (context, index) => myDivider(),
+              itemCount: AppCubit.get(context).joinedUsers!.length,
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 }
+
