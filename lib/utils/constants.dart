@@ -36,5 +36,3 @@ Widget myDivider() => Padding(
     color: Colors.grey[300],
   ),
 );
-
-var joinedGroup;
