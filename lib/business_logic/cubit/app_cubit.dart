@@ -7,7 +7,6 @@ import 'package:meta/meta.dart';
 import 'package:three_stars_task/data/model/user.dart' as model;
 import 'package:three_stars_task/view/screens/group_screen.dart';
 import 'package:three_stars_task/view/screens/welcome_screen.dart';
-
 import '../../data/model/joined.dart';
 import '../../utils/constants.dart';
 part 'app_state.dart';

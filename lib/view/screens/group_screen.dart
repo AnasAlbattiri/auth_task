@@ -18,6 +18,79 @@ class GroupScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  actions: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.black,
+                          ),
+                          onPressed: () {
+                            AppCubit.get(context).signOut(context);
+                          },
+                          child: Text(
+                            'Yes',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: Colors.red,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            'Close',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  title: Center(
+                    child: Text(
+                      'Logout From App',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  contentPadding: EdgeInsets.only(
+                    top: 6,
+                  ),
+                  content: Text(
+                    '   Are you sure you need to logout?',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: kPrimaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.logout,
+            ),
+          ),
+        ],
         title: Text(
           'Group',
           style: TextStyle(
@@ -43,12 +116,30 @@ class GroupScreen extends StatelessWidget {
                             backgroundColor: Colors.green,
                           ),
                           onPressed: () {
-                            navigateAndFinish(context, JoinedScreen());
-                            AppCubit.get(context).joinGroup(
-                              name: auth.currentUser?.displayName,
-                              uId: auth.currentUser?.uid,
-                            );
-                            AppCubit.get(context).getJoinedUsers();
+                            if(AppCubit.get(context).joinedUsers?.length != 3){
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: Center(
+                                    child: Text(
+                                      'You can\'t join, Group is full.',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } else {
+                              navigateAndFinish(context, JoinedScreen());
+                              AppCubit.get(context).joinGroup(
+                                name: auth.currentUser?.displayName,
+                                uId: auth.currentUser?.uid,
+                              );
+                              AppCubit.get(context).getJoinedUsers();
+                            }
                           },
                           child: Text(
                             'Join',
